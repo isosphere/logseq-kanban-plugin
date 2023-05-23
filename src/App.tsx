@@ -1,9 +1,16 @@
 import React, { useState } from 'react';
-import Board from '@asseinfo/react-kanban';
+import Board, { moveCard } from '@asseinfo/react-kanban';
 
 const App = (props: { boardData }) => {
   // Prepare to draw board
-  const [kanbanBoard] = useState(props.boardData);
+  //const [kanbanBoard] = useState(props.boardData);
+  const [kanbanBoard, setBoard] = useState(props.boardData);
+
+  function handleCardMove(_card, source, destination) {
+    console.log('handleCardMove triggered')
+    const updatedBoard = moveCard(kanbanBoard, source, destination);
+    setBoard(updatedBoard);
+  }
 
   if (kanbanBoard.columns.length === 0) {
     return (
@@ -21,7 +28,9 @@ const App = (props: { boardData }) => {
   } else {
     return (
       <div className="wrapper">
-        <Board>{kanbanBoard}</Board>
+        <Board onCardDragEnd={handleCardMove} disableColumnDrag>
+          {kanbanBoard}
+        </Board>
       </div>
     );
   }
